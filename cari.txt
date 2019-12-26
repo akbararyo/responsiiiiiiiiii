@@ -1,0 +1,119 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using BookCatalog.Model.Repository;
+
+using BookCatalog.Model.Entity;
+using BookCatalog.Controller;
+
+namespace BookCatalog.View
+{
+    public partial class FrmPencarian : Form
+    {
+        private List<Buku> listOfBuku = new List<Buku>();
+        private BukuController controller;
+
+        public FrmPencarian()
+        {
+            InitializeComponent();
+
+           controller = new BukuController();
+
+            InisialisasiListView();
+            cmbFilter.SelectedIndex = 0;
+        }
+
+        private void InisialisasiListView()
+        {
+            lvwBuku.View = System.Windows.Forms.View.Details;
+            lvwBuku.FullRowSelect = true;
+            lvwBuku.GridLines = true;
+
+            lvwBuku.Columns.Add("No.", 40, HorizontalAlignment.Center);
+            lvwBuku.Columns.Add("ISBN", 120, HorizontalAlignment.Left);
+            lvwBuku.Columns.Add("Judul", 750, HorizontalAlignment.Left);
+            lvwBuku.Columns.Add("Stok", 40, HorizontalAlignment.Center);
+            lvwBuku.Columns.Add("Penerbit", 180, HorizontalAlignment.Left);
+            lvwBuku.Columns.Add("Pengarang", 180, HorizontalAlignment.Left);
+        }
+
+        private void btnCari_Click(object sender, EventArgs e)
+        {
+            // kosongkan listview
+            
+            if (cmbFilter.SelectedIndex == 0)
+            {
+                lvwBuku.Items.Clear();
+                // panggil method 
+                listOfBuku = controller.ReadByJudul(txtKeyword.Text);
+
+                // ekstrak objek mhs dari collection
+                foreach (var buku in listOfBuku)
+                {
+                    var noUrut = lvwBuku.Items.Count + 1;
+
+                    var item = new ListViewItem(noUrut.ToString());
+                    item.SubItems.Add(buku.Isbn);
+                    item.SubItems.Add(buku.Judul);
+                    item.SubItems.Add(buku.Stok.ToString());
+                    item.SubItems.Add(buku.Penerbit);
+                    item.SubItems.Add(buku.Pengarang);
+
+                    // tampilkan data ke listview
+                    lvwBuku.Items.Add(item);
+                }
+            }
+            else if(cmbFilter.SelectedIndex == 1)
+            {
+                lvwBuku.Items.Clear();
+                // panggil method 
+                listOfBuku = controller.ReadByPenerbit(txtKeyword.Text);
+
+                // ekstrak objek mhs dari collection
+                foreach (var buku in listOfBuku)
+                {
+                    var noUrut = lvwBuku.Items.Count + 1;
+
+                    var item = new ListViewItem(noUrut.ToString());
+                    item.SubItems.Add(buku.Isbn);
+                    item.SubItems.Add(buku.Judul);
+                    item.SubItems.Add(buku.Stok.ToString());
+                    item.SubItems.Add(buku.Penerbit);
+                    item.SubItems.Add(buku.Pengarang);
+
+                    // tampilkan data ke listview
+                    lvwBuku.Items.Add(item);
+                }
+            }
+            else if (cmbFilter.SelectedIndex == 2)
+            {
+                lvwBuku.Items.Clear();
+                // panggil method 
+                listOfBuku = controller.ReadByPengarang(txtKeyword.Text);
+
+                // ekstrak objek mhs dari collection
+                foreach (var buku in listOfBuku)
+                {
+                    var noUrut = lvwBuku.Items.Count + 1;
+
+                    var item = new ListViewItem(noUrut.ToString());
+                    item.SubItems.Add(buku.Isbn);
+                    item.SubItems.Add(buku.Judul);
+                    item.SubItems.Add(buku.Stok.ToString());
+                    item.SubItems.Add(buku.Penerbit);
+                    item.SubItems.Add(buku.Pengarang);
+
+                    // tampilkan data ke listview
+                    lvwBuku.Items.Add(item);
+                }
+            }
+
+        }
+    }
+}
